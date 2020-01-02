@@ -3,15 +3,18 @@ require 'minitest/autorun'
 require 'minitest/pride'
 require './lib/game_teams'
 require './lib/team'
-require 'mocha/minitest'
 
 class GameTeamsTest < Minitest::Test
 
   def setup
     @game_teams = GameTeams.from_csv("./test/fixtures/game_teams.csv")
-    @first_game_team = GameTeams.all[0]
-    Team.from_csv("./test/fixtures/teams.csv")
-    @teams = Team.all
+    # require 'pry'; binding.pry
+    @first_game_team = @game_teams[0]
+    @@all = @game_teams 
+    # @first_game_team = GameTeams.all[0]
+    @teams = Team.from_csv("./test/fixtures/teams.csv")
+    # @teams = Team.all
+
   end
 
   def test_it_exists

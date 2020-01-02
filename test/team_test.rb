@@ -25,4 +25,8 @@ class TeamTest < Minitest::Test
     assert_equal "Houston Dynamo", Team.team_id_to_team_name("3")
   end
 
+  def test_it_can_count_the_teams
+    assert_equal 32, Team.count_of_teams
+  end
+
 end

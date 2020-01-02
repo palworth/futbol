@@ -1,7 +1,9 @@
 require 'csv'
-require_relative '../lib/team'
+require_relative './loadable'
 
 class GameTeams
+
+  extend Loadable
 
   attr_reader :game_id, :team_id, :hoa, :result, :goals
 
@@ -13,20 +15,14 @@ class GameTeams
     @goals = game_team_info[:goals]
   end
 
-  def self.all
-    @@all
-  end
+  @@all = []
 
-  def self.team
-    @@team
-  end
+   def self.all
+      @@all
+   end
 
   def self.from_csv(file_path)
-    @@team = Team.from_csv("./data/teams.csv")
-    csv = CSV.read("#{file_path}", headers: true, header_converters: :symbol)
-    @@all = csv.map do |row|
-      GameTeams.new(row)
-    end
+    @@all = load_objects(file_path)
   end
 
   def self.winningest_team
@@ -47,7 +43,6 @@ class GameTeams
   end
 
   def self.games_per_team
-    # @@games_per_team ||= 
     @@all.group_by {|game| game.team_id}
   end
 
