@@ -25,7 +25,7 @@ class Team
   ## Teardown method for minitest
 
   def self.from_csv(file_path)
-    @@all = load_objects(file_path)
+    @@all = load_objects(file_path, 'Team')
   end
 
   def self.count_of_teams

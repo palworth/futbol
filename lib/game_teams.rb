@@ -22,7 +22,7 @@ class GameTeams
    end
 
   def self.from_csv(file_path)
-    @@all = load_objects(file_path)
+    @@all = load_objects(file_path, 'GameTeams')
   end
 
   def self.winningest_team
