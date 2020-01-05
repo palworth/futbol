@@ -25,8 +25,32 @@ class GameTeams
     @@all = load_objects(file_path, 'GameTeams')
   end
 
+  def self.best_offense
+    most_goals_team = goals_per_team.max_by do
+      |team, goals| goals
+    end[0]
+    Team.team_id_to_team_name(most_goals_team)
+  end
+
+  def self.worst_offense
+    most_goals_team = goals_per_team.min_by do
+      |team, goals| goals
+    end[0]
+    Team.team_id_to_team_name(most_goals_team)
+  end
+
+   def self.goals_per_team
+     games_per_team.reduce({}) do |goals_acc, team_goals|
+       goals_acc[team_goals[0]] = team_goals[1].count {|game| game.goals}
+       goals_acc
+       # require "pry"; binding.pry
+     end
+   end
+
   def self.winningest_team
-    winningest_team_id = wins_per_team.max_by { |team| team[1] }[0]
+    winningest_team_id = wins_per_team.max_by do
+       |team| team[1]
+     end [0]
     Team.team_id_to_team_name(winningest_team_id)
   end
 
@@ -46,7 +70,7 @@ class GameTeams
     @@all.group_by {|game| game.team_id}
   end
 
-  def self.wins_per_team 
+  def self.wins_per_team
     games_per_team.reduce({}) do |result, team_result|
       result[team_result[0]] = team_result[1].count {|game| game.result == 'WIN'} / team_result[1].size.to_f
       result
@@ -63,7 +87,7 @@ class GameTeams
   def self.win_loss_perc_per_team
     home_away_games_per_team.reduce({}) do |result, team|
       result[team[0]] = {
-        away_win_percentage: ((team[1]["away"].count {|game| game.result == "WIN"})/team[1]["away"].size.to_f).round(4), 
+        away_win_percentage: ((team[1]["away"].count {|game| game.result == "WIN"})/team[1]["away"].size.to_f).round(4),
         home_win_percentage: ((team[1]["home"].count {|game| game.result == "WIN"})/team[1]["home"].size.to_f).round(4)
         }
       result
