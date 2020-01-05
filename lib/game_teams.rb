@@ -33,17 +33,16 @@ class GameTeams
   end
 
   def self.worst_offense
-    most_goals_team = goals_per_team.min_by do
+    least_goals_team = goals_per_team.min_by do
       |team, goals| goals
     end[0]
-    Team.team_id_to_team_name(most_goals_team)
+    Team.team_id_to_team_name(least_goals_team)
   end
 
    def self.goals_per_team
      games_per_team.reduce({}) do |goals_acc, team_goals|
        goals_acc[team_goals[0]] = team_goals[1].count {|game| game.goals}
        goals_acc
-       # require "pry"; binding.pry
      end
    end
 
