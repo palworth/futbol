@@ -68,8 +68,8 @@ class GameCollectionTest < Minitest::Test
     assert_equal "Houston Dynamo", @game_collection.worst_defense
   end
 
-  # def test_best_defense
-  #   assert_equal "Houston Dynamo", @game_collection.worst_defense
-  # end
+  def test_best_defense
+    assert_equal "Orlando Pride", @game_collection.best_defense
+  end
 
 end
