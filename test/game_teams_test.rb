@@ -9,12 +9,20 @@ class GameTeamsTest < Minitest::Test
   def setup
     @game_teams = GameTeams.from_csv("./test/fixtures/game_teams.csv")
     @first_game_team = @game_teams[0]
-    @@all = @game_teams 
+    @@all = @game_teams
     @teams = Team.from_csv("./test/fixtures/teams.csv")
   end
 
   def test_it_exists
     assert_instance_of GameTeams, @first_game_team
+  end
+
+  def test_it_finds_best_offense
+    assert_equal 'FC Dallas', GameTeams.best_offense
+  end
+
+  def test_it_finds_worst_offense
+    assert_equal 'Houston Dynamo', GameTeams.worst_offense
   end
 
   def test_it_can_get_the_highest_winning_team
