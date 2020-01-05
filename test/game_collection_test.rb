@@ -63,8 +63,13 @@ class GameCollectionTest < Minitest::Test
   def test_average_goals_per_game_method
     assert_equal 4.38, @game_collection.average_goals_per_game
   end
-  
-  def test
-    @game_collection.count_teams
+
+  def test_worst_defense
+    assert_equal "Houston Dynamo", @game_collection.worst_defense
   end
+
+  # def test_best_defense
+  #   assert_equal "Houston Dynamo", @game_collection.worst_defense
+  # end
+
 end
