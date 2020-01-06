@@ -17,14 +17,6 @@ class GameTeamsTest < Minitest::Test
     assert_instance_of GameTeams, @first_game_team
   end
 
-  def test_it_finds_best_offense
-    assert_equal 'FC Dallas', GameTeams.best_offense
-  end
-
-  def test_it_finds_worst_offense
-    assert_equal 'Houston Dynamo', GameTeams.worst_offense
-  end
-
   def test_it_can_get_the_highest_winning_team
     assert_equal 'FC Dallas', GameTeams.winningest_team
   end

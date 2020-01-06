@@ -25,20 +25,6 @@ class GameTeams
     @@all = load_objects(file_path, 'GameTeams')
   end
 
-  def self.best_offense
-    most_goals_team = goals_per_team.max_by do
-      |team, goals| goals
-    end[0]
-    Team.team_id_to_team_name(most_goals_team)
-  end
-
-  def self.worst_offense
-    least_goals_team = goals_per_team.min_by do
-      |team, goals| goals
-    end[0]
-    Team.team_id_to_team_name(least_goals_team)
-  end
-
    def self.goals_per_team
      games_per_team.reduce({}) do |goals_acc, team_goals|
        goals_acc[team_goals[0]] = team_goals[1].count {|game| game.goals}

@@ -64,8 +64,16 @@ class GameCollectionTest < Minitest::Test
     assert_equal 4.38, @game_collection.average_goals_per_game
   end
 
+  def test_it_finds_best_offense
+    assert_equal "New York City FC", @game_collection.best_offense
+  end
+
+  def test_it_finds_worst_offense
+    assert_equal "New York Red Bulls", @game_collection.worst_offense
+  end
+
   def test_worst_defense
-    assert_equal "Houston Dynamo", @game_collection.worst_defense
+    assert_equal "New York Red Bulls", @game_collection.worst_defense
   end
 
   def test_best_defense
