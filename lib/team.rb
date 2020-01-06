@@ -1,6 +1,6 @@
 require 'csv'
-require_relative 'team'
-require_relative './loadable'
+# require_relative 'team'
+require_relative 'loadable'
 
 class Team
 

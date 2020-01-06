@@ -62,4 +62,56 @@ class GameTeamsTest < Minitest::Test
     assert_equal true, (expected_output == GameTeams.difference_home_and_away_wins_percentage)
   end
 
+  def test_all_away_games_by_team
+    expected = {
+      "3" => [@game_teams[0], @game_teams[2], @game_teams[8]],
+      "6" => [@game_teams[4], @game_teams[6], @game_teams[10]]
+    }
+    assert_equal expected, GameTeams.away_games
+  end
+
+  def test_all_home_games_by_team
+    expected = {
+        "3" => [@game_teams[5], @game_teams[7]],
+        "6" => [@game_teams[1], @game_teams[3], @game_teams[9]]
+    }
+    assert_equal expected, GameTeams.home_games
+  end
+
+  def test_highest_scoring_visitor
+    assert_equal "FC Dallas", GameTeams.highest_scoring_visitor
+  end
+
+  def test_highest_scoring_home_team
+    assert_equal "FC Dallas", GameTeams.highest_scoring_home_team
+  end
+
+  def test_lowest_scoring_visitor
+    assert_equal "Houston Dynamo", GameTeams.lowest_scoring_visitor
+  end
+
+  def test_lowest_scoring_home_team
+    assert_equal "Houston Dynamo", GameTeams.lowest_scoring_home_team 
+  end
+
+  # def test_it_can_determine_the_name_of_the_coach_given_a_team_id
+  #   assert_equal "Claude Julien", GameTeams.team_id_to_coach("6")
+  # end
+
+  def test_it_can_find_the_coach_for_a_given_season_and_team_id
+    assert_equal "Claude Julien", GameTeams.team_id_to_coach("6", 20122013)
+  end
+
+  def test_it_can_determine_the_coach_for_a_given_game_id
+    assert_equal "John Tortorella", GameTeams.game_id_to_coach(2012030225)
+  end
+
+  # def test_game_per_coach
+  #   require 'pry'; binding.pry
+  #   # get the games per_season
+  #   # match the games with their coach
+  #   # group games by coach
+  #   # check success rate
+  # end
+
 end

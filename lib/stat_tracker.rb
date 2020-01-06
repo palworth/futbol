@@ -12,7 +12,6 @@ class StatTracker
     game_path = locations[:games]
     team_path = locations[:teams]
     game_teams_path = locations[:game_teams]
-
     StatTracker.new(game_path, team_path, game_teams_path)
   end
 
@@ -39,7 +38,7 @@ class StatTracker
   end
 
   def percentage_ties
-    @game_collection.percentage_ties 
+    @game_collection.percentage_ties
   end
 
   def average_goals_by_season
@@ -66,6 +65,22 @@ class StatTracker
     @game_collection.count_of_games_by_season
   end
 
+  def winningest_coach(season_id)
+    @game_collection.winningest_coach(season_id)
+  end
+
+  def worst_coach(season_id)
+    @game_collection.worst_coach(season_id)
+  end
+
+  def most_accurate_team(season_id)
+    @game_collection.most_accurate_team(season_id)
+  end
+
+  def least_accurate_team(season_id)
+    @game_collection.least_accurate_team(season_id)
+  end
+
   def winningest_team
     GameTeams.winningest_team
   end
@@ -81,5 +96,22 @@ class StatTracker
   def count_of_teams
     Team.count_of_teams
   end
+
+  def highest_scoring_visitor
+    GameTeams.highest_scoring_visitor
+  end
+
+  def highest_scoring_home_team
+    GameTeams.highest_scoring_home_team
+  end
+
+  def lowest_scoring_visitor
+    GameTeams.lowest_scoring_visitor
+  end
+
+  def lowest_scoring_home_team
+    GameTeams.lowest_scoring_home_team
+  end
+
 
 end

@@ -6,18 +6,11 @@ require_relative '../lib/game_collection'
 
 class GameCollectionTest < Minitest::Test
   def setup
+    
     csv_file_path = './test/fixtures/games.csv'
-    @game_collection = GameCollection.new(csv_file_path)
-    game_info = {:game_id => "2012030221",
-                 :season => "20122013",
-                 :type => "Postseason",
-                 :date_time => "5/16/13",
-                 :away_team_id => "3",
-                 :home_team_id => "6",
-                 :away_goals => "2",
-                 :home_goals => "3",
-                 :venue => "Toyota Stadium"}
-    @first_game = @game_collection.games.first
+    @game_collection ||= GameCollection.new(csv_file_path)
+    @teams = Team.from_csv("./test/fixtures/teams.csv")
+    # @game_teams ||= GameTeams.from_csv("./data/game_teams.csv")
   end
 
   def test_it_exists
@@ -63,8 +56,32 @@ class GameCollectionTest < Minitest::Test
   def test_average_goals_per_game_method
     assert_equal 4.38, @game_collection.average_goals_per_game
   end
-  
-  def test
-    @game_collection.count_teams
+
+  def test_it_can_find_the_winningest_coach_for_a_given_season
+    assert_equal "Claude Julien", @game_collection.winningest_coach(20122013)
   end
+
+  def test_it_can_find_the_worst_coach_for_a_given_season
+    assert_equal "John Tortorella", @game_collection.worst_coach(20122013)
+  end
+
+  def test_it_can_find_the_number_of_shots_and_goals_per_team
+    expected = {"29" => [5, 3], "14" => [16, 4], "13" =>[5, 2], "3" => [7, 2], "15" => [11, 3]}
+    assert_equal true, expected == @game_collection.shots_and_goals_per_team(20142015)
+  end
+
+  def test_it_can_determine_the_ratio_of_shots_to_goals_per_team
+    expected = {"29" => 1.667, "14" => 4.0, "13" => 2.5, "3" => 3.5, "15" => 3.667}
+    assert_equal true, expected == @game_collection.ratio_shots_to_goals_per_team(20142015)
+  end
+
+  def test_it_can_find_the_most_accurate_team
+    assert_equal "Orlando Pride", @game_collection.most_accurate_team(20142015)
+  end
+
+   def test_it_can_find_the_least_accurate_team
+    assert_equal "DC United", @game_collection.least_accurate_team(20142015)
+  end
+
 end
+
