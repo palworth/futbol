@@ -1,12 +1,11 @@
 require 'csv'
-# require_relative 'team'
 require_relative 'loadable'
 
 class Team
 
-  extend Loadable 
+  extend Loadable
 
-  attr_reader :team_id, :franchiseId, :teamName, :abbreviation
+  attr_reader :team_id, :franchiseId, :teamName, :abbreviation, :link
 
   def initialize(team_info)
     @team_id = team_info[:team_id]
@@ -19,11 +18,8 @@ class Team
   @@all = []
 
   def self.all
-    @@all 
+    @@all
   end
-
-  #this can be a self.reset method which makes an empty array again
-  ## Teardown method for minitest
 
   def self.from_csv(file_path)
     @@all = load_objects(file_path, 'Team')
@@ -33,8 +29,8 @@ class Team
     @@all.size
   end
 
-   def self.find_team_by_id(team_id)
-    @@all.find {|team| team.team_id == team_id}
+  def self.find_team_by_id(team_id)
+    @@all.find { |team| team.team_id == team_id }
   end
 
   def self.team_id_to_team_name(team_id)
@@ -43,7 +39,14 @@ class Team
 
   def self.team_info(team_id)
     team = find_team_by_id(team_id)
-    {team_id: team.team_id , franchise_id: team.franchiseId , team_name: team.teamName, abbreviation: team.abbreviation, link: team.link}
+    { team_id: team.team_id,
+      franchise_id: team.franchiseId,
+      team_name: team.teamName,
+      abbreviation: team.abbreviation,
+      link: team.link
+    }
   end
 
+    #this can be a self.reset method which makes an empty array again
+  ## Teardown method for minitest
 end
