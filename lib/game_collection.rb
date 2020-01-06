@@ -88,7 +88,7 @@ class GameCollection
    # require "pry"; binding.pry
     Team.team_id_to_team_name(team_worst_offense_id)
   end
-  
+
   def best_offense
    team_hash = @games.reduce({}) do |team_id, game|
     team_id[game.home_team_id] = {goals_scored: 0, games_played: 0}
@@ -109,35 +109,22 @@ class GameCollection
     Team.team_id_to_team_name(team_worst_offense_id)
   end
 
-  def goals_per_game_average
+  def worst_defense
     team_hash = @games.reduce({}) do |team_id, game|
-     team_id[game.home_team_id] = {goals_scored: 0, games_played: 0}
-     team_id[game.away_team_id] = {goals_scored: 0, games_played: 0}
-     team_id
-    end
+      team_id[game.home_team_id] = {goals_let: 0, games_played: 0}
+      team_id[game.away_team_id] = {goals_let: 0, games_played: 0}
+      team_id
+  end
     @games.each do |game|
       team_hash[game.home_team_id][:games_played] += 1
       team_hash[game.away_team_id][:games_played] += 1
-      team_hash[game.away_team_id][:goals_scored] += game.away_goals
-      team_hash[game.home_team_id][:goals_scored] += game.home_goals
+      team_hash[game.away_team_id][:goals_let] += game.home_goals
+      team_hash[game.home_team_id][:goals_let] += game.away_goals
     end
-  end
-    def worst_defense
-      team_hash = @games.reduce({}) do |team_id, game|
-        team_id[game.home_team_id] = {goals_let: 0, games_played: 0}
-        team_id[game.away_team_id] = {goals_let: 0, games_played: 0}
-        team_id
-      end
-      @games.each do |game|
-        team_hash[game.home_team_id][:games_played] += 1
-        team_hash[game.away_team_id][:games_played] += 1
-        team_hash[game.away_team_id][:goals_let] += game.home_goals
-        team_hash[game.home_team_id][:goals_let] += game.away_goals
-      end
-      team_worst_defense = team_hash.max_by do |team, info|
-        info[:goals_let].to_f / info[:games_played]
-      end[0]
-      team_worst_defense_id = team_worst_defense.to_s
+    team_worst_defense = team_hash.max_by do |team, info|
+      info[:goals_let].to_f / info[:games_played]
+    end[0]
+    team_worst_defense_id = team_worst_defense.to_s
       Team.team_id_to_team_name(team_worst_defense_id)
     end
 
