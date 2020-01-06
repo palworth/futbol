@@ -6,9 +6,8 @@ require_relative '../lib/game_collection'
 
 class GameCollectionTest < Minitest::Test
   def setup
-    
     csv_file_path = './test/fixtures/games.csv'
-    @game_collection ||= GameCollection.new(csv_file_path)
+    @game_collection = GameCollection.new(csv_file_path)
     @teams = Team.from_csv("./test/fixtures/teams.csv")
     # @game_teams ||= GameTeams.from_csv("./data/game_teams.csv")
   end
