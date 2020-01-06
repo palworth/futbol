@@ -3,15 +3,14 @@ require 'minitest/autorun'
 require 'minitest/pride'
 require './lib/game_teams'
 require './lib/team'
-require 'mocha/minitest'
 
 class GameTeamsTest < Minitest::Test
 
   def setup
     @game_teams = GameTeams.from_csv("./test/fixtures/game_teams.csv")
-    @first_game_team = GameTeams.all[0]
-    Team.from_csv("./test/fixtures/teams.csv")
-    @teams = Team.all
+    @first_game_team = @game_teams[0]
+    @@all = @game_teams 
+    @teams = Team.from_csv("./test/fixtures/teams.csv")
   end
 
   def test_it_exists
@@ -95,6 +94,24 @@ class GameTeamsTest < Minitest::Test
     assert_equal "Houston Dynamo", GameTeams.lowest_scoring_home_team 
   end
 
+  # def test_it_can_determine_the_name_of_the_coach_given_a_team_id
+  #   assert_equal "Claude Julien", GameTeams.team_id_to_coach("6")
+  # end
 
+  def test_it_can_find_the_coach_for_a_given_season_and_team_id
+    assert_equal "Claude Julien", GameTeams.team_id_to_coach("6", 20122013)
+  end
+
+  def test_it_can_determine_the_coach_for_a_given_game_id
+    assert_equal "John Tortorella", GameTeams.game_id_to_coach(2012030225)
+  end
+
+  # def test_game_per_coach
+  #   require 'pry'; binding.pry
+  #   # get the games per_season
+  #   # match the games with their coach
+  #   # group games by coach
+  #   # check success rate
+  # end
 
 end
