@@ -12,7 +12,6 @@ class GameCollection
 
   def initialize(csv_file_path)
     @games = load_objects(csv_file_path, "Game")
-    # @game_teams ||= GameTeams.from_csv("./data/game_teams.csv")
   end
 
   def highest_total_score
@@ -45,7 +44,7 @@ class GameCollection
   end
 
   def percentage_ties
-     (@games.count {|game| game.away_goals == game.home_goals} / @games.size.to_f ).round(2)
+    (@games.count {|game| game.away_goals == game.home_goals} / @games.size.to_f ).round(2)
   end
 
   def count_of_games_by_season
@@ -74,13 +73,9 @@ class GameCollection
     @games_per_season ||= @games.group_by{|game| game.season}
   end
 
-  def game_teams
-    @game_teams ||= GameTeams.from_csv("./data/game_teams.csv")
-  end
-
   def teams_for_season(season_id)
     games_per_season[season_id.to_s].map do |game|
-      game_teams.find_all {|game_team| game_team.game_id == game.game_id} 
+      GameTeams.all.find_all {|game_team| game_team.game_id == game.game_id} 
     end.flatten
   end
 
@@ -144,4 +139,4 @@ class GameCollection
     Team.team_id_to_team_name(least_accurate_team[0])
   end
 
-end 
+end

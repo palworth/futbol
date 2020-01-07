@@ -66,8 +66,8 @@ class GameTeams
   def self.win_loss_perc_per_team
     home_away_games_per_team.reduce({}) do |result, team|
       result[team[0]] = {
-        away_win_percentage: ((team[1]["away"].count {|game| game.result == "WIN"})/team[1]["away"].size.to_f).round(4),
-        home_win_percentage: ((team[1]["home"].count {|game| game.result == "WIN"})/team[1]["home"].size.to_f).round(4)
+        away_win_percentage: ((team[1]['away'].count {|game| game.result == 'WIN'})/team[1]['away'].size.to_f).round(4),
+        home_win_percentage: ((team[1]['home'].count {|game| game.result == 'WIN'})/team[1]['home'].size.to_f).round(4)
         }
       result
     end
@@ -84,7 +84,7 @@ class GameTeams
     away_games = {}
     games_per_team.each do |team_id, game_array|
       away_games[team_id] = game_array.find_all do |game|
-        game.hoa == "away"
+        game.hoa == 'away'
       end
     end
     away_games
@@ -116,7 +116,7 @@ class GameTeams
     home_games = {}
     games_per_team.each do |team_id, game_array|
       home_games[team_id] = game_array.find_all do |game|
-        game.hoa == "home"
+        game.hoa == 'home'
       end
     end
     home_games
@@ -155,6 +155,5 @@ class GameTeams
       game.game_id == game_id.to_s
     end.head_coach
   end
-
 
 end

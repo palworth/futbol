@@ -9,7 +9,7 @@ class GameCollectionTest < Minitest::Test
     csv_file_path = './test/fixtures/games.csv'
     @game_collection = GameCollection.new(csv_file_path)
     @teams = Team.from_csv("./test/fixtures/teams.csv")
-    # @game_teams ||= GameTeams.from_csv("./data/game_teams.csv")
+    @game_teams = GameTeams.from_csv("./data/game_teams.csv")
   end
 
   def test_it_exists
