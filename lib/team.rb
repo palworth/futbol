@@ -39,14 +39,11 @@ class Team
 
   def self.team_info(team_id)
     team = find_team_by_id(team_id)
-    { team_id: team.team_id,
-      franchise_id: team.franchiseId,
-      team_name: team.teamName,
-      abbreviation: team.abbreviation,
-      link: team.link
-    }
+    { 'team_id' => team.team_id,
+      'franchise_id' => team.franchiseId,
+      'team_name' => team.teamName,
+      'abbreviation' => team.abbreviation,
+      'link' => team.link }
   end
 
-    #this can be a self.reset method which makes an empty array again
-  ## Teardown method for minitest
 end

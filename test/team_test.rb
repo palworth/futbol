@@ -4,6 +4,7 @@ require 'minitest/pride'
 require_relative '../lib/team'
 
 class TeamTest < Minitest::Test
+  
   def setup
     Team.from_csv('./test/fixtures/teams.csv')
     @team = Team.all[0]
@@ -34,7 +35,7 @@ class TeamTest < Minitest::Test
   end
 
   def test_it_can_return_the_team_info_for_a_given_team_id
-    expected = {team_id: '17', franchise_id: '12', team_name: 'LA Galaxy', abbreviation: 'LA', link: '/api/v1/teams/17'}
+    expected = { 'team_id' => '17', 'franchise_id' => '12', 'team_name' => 'LA Galaxy', 'abbreviation' => 'LA', 'link' => '/api/v1/teams/17' }
     assert_equal expected, Team.team_info('17')
   end
 

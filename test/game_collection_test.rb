@@ -3,6 +3,7 @@ require "minitest/autorun"
 require 'minitest/pride'
 require_relative '../lib/game'
 require_relative '../lib/game_collection'
+require_relative '../lib/team'
 
 class GameCollectionTest < Minitest::Test
   def setup
@@ -72,6 +73,22 @@ class GameCollectionTest < Minitest::Test
   def test_it_can_determine_the_ratio_of_shots_to_goals_per_team
     expected = {"29" => 1.667, "14" => 4.0, "13" => 2.5, "3" => 3.5, "15" => 3.667}
     assert_equal true, expected == @game_collection.ratio_shots_to_goals_per_team(20142015)
+  end
+  
+  def test_it_finds_best_offense
+    assert_equal "New York City FC", @game_collection.best_offense
+  end
+
+  def test_it_finds_worst_offense
+    assert_equal "New York Red Bulls", @game_collection.worst_offense
+  end
+
+  def test_worst_defense
+    assert_equal "New York Red Bulls", @game_collection.worst_defense
+  end
+
+  def test_best_defense
+    assert_equal "Orlando Pride", @game_collection.best_defense
   end
 
   def test_it_can_find_the_most_accurate_team

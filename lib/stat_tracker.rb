@@ -113,5 +113,24 @@ class StatTracker
     GameTeams.lowest_scoring_home_team
   end
 
+  def best_offense
+    @game_collection.best_offense
+  end
+
+  def worst_offense
+    @game_collection.worst_offense
+  end
+
+  def worst_defense
+    @game_collection.worst_defense
+  end
+
+  def best_defense
+    @game_collection.best_defense
+  end
+
+  def team_info(team_id)
+    Team.team_info(team_id)
+  end
 
 end
