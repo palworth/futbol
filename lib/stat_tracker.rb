@@ -12,7 +12,6 @@ class StatTracker
     game_path = locations[:games]
     team_path = locations[:teams]
     game_teams_path = locations[:game_teams]
-
     StatTracker.new(game_path, team_path, game_teams_path)
   end
 
@@ -66,6 +65,22 @@ class StatTracker
     @game_collection.count_of_games_by_season
   end
 
+  def winningest_coach(season_id)
+    @game_collection.winningest_coach(season_id)
+  end
+
+  def worst_coach(season_id)
+    @game_collection.worst_coach(season_id)
+  end
+
+  def most_accurate_team(season_id)
+    @game_collection.most_accurate_team(season_id)
+  end
+
+  def least_accurate_team(season_id)
+    @game_collection.least_accurate_team(season_id)
+  end
+
   def winningest_team
     GameTeams.winningest_team
   end
@@ -112,6 +127,10 @@ class StatTracker
 
   def best_defense
     @game_collection.best_defense
+  end
+
+  def team_info(team_id)
+    Team.team_info(team_id)
   end
 
 end
