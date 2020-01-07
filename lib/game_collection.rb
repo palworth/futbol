@@ -139,6 +139,8 @@ class GameCollection
     Team.team_id_to_team_name(least_accurate_team[0])
   end
 
+
+
   def worst_offense
     team_hash = @games.reduce({}) do |team_id, game|
       team_id[game.home_team_id] = {goals_scored: 0, games_played: 0}
