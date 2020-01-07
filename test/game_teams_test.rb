@@ -91,27 +91,7 @@ class GameTeamsTest < Minitest::Test
   end
 
   def test_lowest_scoring_home_team
-    assert_equal "Houston Dynamo", GameTeams.lowest_scoring_home_team 
+    assert_equal "Houston Dynamo", GameTeams.lowest_scoring_home_team
   end
-
-  # def test_it_can_determine_the_name_of_the_coach_given_a_team_id
-  #   assert_equal "Claude Julien", GameTeams.team_id_to_coach("6")
-  # end
-
-  def test_it_can_find_the_coach_for_a_given_season_and_team_id
-    assert_equal "Claude Julien", GameTeams.team_id_to_coach("6", 20122013)
-  end
-
-  def test_it_can_determine_the_coach_for_a_given_game_id
-    assert_equal "John Tortorella", GameTeams.game_id_to_coach(2012030225)
-  end
-
-  # def test_game_per_coach
-  #   require 'pry'; binding.pry
-  #   # get the games per_season
-  #   # match the games with their coach
-  #   # group games by coach
-  #   # check success rate
-  # end
 
 end
