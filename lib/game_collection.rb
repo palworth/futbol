@@ -78,19 +78,19 @@ class GameCollection
   end
 
   def team_collection_offense
-  team_collection = @games.reduce({}) do |team_id, game|
-    team_id[game.home_team_id] = {goals_scored: 0, games_played: 0}
-    team_id[game.away_team_id] = {goals_scored: 0, games_played: 0}
-    team_id
+     team_collection = @games.reduce({}) do |team_id, game|
+      team_id[game.home_team_id] = {goals_scored: 0, games_played: 0}
+      team_id[game.away_team_id] = {goals_scored: 0, games_played: 0}
+      team_id
+    end
+     @games.each do |game|
+      team_collection[game.home_team_id][:games_played] += 1
+      team_collection[game.away_team_id][:games_played] += 1
+      team_collection[game.away_team_id][:goals_scored] += game.away_goals
+      team_collection[game.home_team_id][:goals_scored] += game.home_goals
+    end
+    team_collection
   end
-   @games.each do |game|
-    team_collection[game.home_team_id][:games_played] += 1
-    team_collection[game.away_team_id][:games_played] += 1
-    team_collection[game.away_team_id][:goals_scored] += game.away_goals
-    team_collection[game.home_team_id][:goals_scored] += game.home_goals
-  end
-  team_collection
-end
 
   def worst_offense
     team_worst_offense = team_collection_offense.min_by do |team, info|
@@ -109,18 +109,18 @@ end
   end
 
   def team_collection_defense
-   team_collection = @games.reduce({}) do |team_id, game|
-    team_id[game.home_team_id] = {goals_let: 0, games_played: 0}
-    team_id[game.away_team_id] = {goals_let: 0, games_played: 0}
-    team_id
-  end
-  @games.each do |game|
-    team_collection[game.home_team_id][:games_played] += 1
-    team_collection[game.away_team_id][:games_played] += 1
-    team_collection[game.away_team_id][:goals_let] += game.home_goals
-    team_collection[game.home_team_id][:goals_let] += game.away_goals
-  end
-  team_collection
+     team_collection = @games.reduce({}) do |team_id, game|
+      team_id[game.home_team_id] = {goals_let: 0, games_played: 0}
+      team_id[game.away_team_id] = {goals_let: 0, games_played: 0}
+      team_id
+    end
+    @games.each do |game|
+      team_collection[game.home_team_id][:games_played] += 1
+      team_collection[game.away_team_id][:games_played] += 1
+      team_collection[game.away_team_id][:goals_let] += game.home_goals
+      team_collection[game.home_team_id][:goals_let] += game.away_goals
+    end
+    team_collection
   end
 
   def worst_defense
