@@ -1,5 +1,5 @@
 require_relative '../test_helper'
-require "minitest/autorun"
+require 'minitest/autorun'
 require 'minitest/pride'
 require_relative '../lib/game'
 require_relative '../lib/game_collection'
@@ -9,8 +9,8 @@ class GameCollectionTest < Minitest::Test
   def setup
     csv_file_path = './test/fixtures/games.csv'
     @game_collection = GameCollection.new(csv_file_path)
-    @teams = Team.from_csv("./test/fixtures/teams.csv")
-    @game_teams = GameTeams.from_csv("./data/game_teams.csv")
+    @teams = Team.from_csv('./test/fixtures/teams.csv')
+    @game_teams = GameTeams.from_csv('./data/game_teams.csv')
   end
 
   def test_it_exists
@@ -49,7 +49,7 @@ class GameCollectionTest < Minitest::Test
   end
 
   def test_count_of_games_by_season_method
-    expected = {"20122013"=>12, "20152016"=>9, "20132014"=>1, "20142015"=>3, "20162017"=>1}
+    expected = {'20122013'=>12, '20152016'=>9, '20132014'=>1, '20142015'=>3, '20162017'=>1}
     assert_equal expected, @game_collection.count_of_games_by_season
   end
 
@@ -57,47 +57,20 @@ class GameCollectionTest < Minitest::Test
     assert_equal 4.38, @game_collection.average_goals_per_game
   end
 
-  def test_it_can_find_the_winningest_coach_for_a_given_season
-    assert_equal "Claude Julien", @game_collection.winningest_coach(20122013)
-  end
-
-  def test_it_can_find_the_worst_coach_for_a_given_season
-    assert_equal "John Tortorella", @game_collection.worst_coach(20122013)
-  end
-
-  def test_it_can_find_the_number_of_shots_and_goals_per_team
-    expected = {"29" => [5, 3], "14" => [16, 4], "13" =>[5, 2], "3" => [7, 2], "15" => [11, 3]}
-    assert_equal true, expected == @game_collection.shots_and_goals_per_team(20142015)
-  end
-
-  def test_it_can_determine_the_ratio_of_shots_to_goals_per_team
-    expected = {"29" => 1.667, "14" => 4.0, "13" => 2.5, "3" => 3.5, "15" => 3.667}
-    assert_equal true, expected == @game_collection.ratio_shots_to_goals_per_team(20142015)
-  end
-  
   def test_it_finds_best_offense
-    assert_equal "New York City FC", @game_collection.best_offense
+    assert_equal 'New York City FC', @game_collection.best_offense
   end
 
   def test_it_finds_worst_offense
-    assert_equal "New York Red Bulls", @game_collection.worst_offense
+    assert_equal 'New York Red Bulls', @game_collection.worst_offense
   end
 
   def test_worst_defense
-    assert_equal "New York Red Bulls", @game_collection.worst_defense
+    assert_equal 'New York Red Bulls', @game_collection.worst_defense
   end
 
   def test_best_defense
-    assert_equal "Orlando Pride", @game_collection.best_defense
-  end
-
-  def test_it_can_find_the_most_accurate_team
-    assert_equal "Orlando Pride", @game_collection.most_accurate_team(20142015)
-  end
-
-   def test_it_can_find_the_least_accurate_team
-    assert_equal "DC United", @game_collection.least_accurate_team(20142015)
+    assert_equal 'Orlando Pride', @game_collection.best_defense
   end
 
 end
-

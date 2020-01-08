@@ -19,9 +19,9 @@ class GameTeams
 
   @@all = []
 
-   def self.all
-      @@all
-   end
+  def self.all
+    @@all
+  end
 
   def self.from_csv(file_path)
     @@all = load_objects(file_path, 'GameTeams')
