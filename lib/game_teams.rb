@@ -1,9 +1,11 @@
 require 'csv'
-require_relative '../lib/team'
+require_relative './loadable'
 
 class GameTeams
 
-  attr_reader :game_id, :team_id, :hoa, :result, :goals
+  extend Loadable
+
+  attr_reader :game_id, :team_id, :hoa, :result, :goals, :head_coach, :shots
 
   def initialize(game_team_info)
     @game_id = game_team_info[:game_id]
@@ -11,22 +13,18 @@ class GameTeams
     @hoa = game_team_info[:hoa]
     @result = game_team_info[:result]
     @goals = game_team_info[:goals]
+    @shots = game_team_info[:shots]
+    @head_coach = game_team_info[:head_coach]
   end
+
+  @@all = []
 
   def self.all
     @@all
   end
 
-  def self.team
-    @@team
-  end
-
   def self.from_csv(file_path)
-    @@team = Team.from_csv("./data/teams.csv")
-    csv = CSV.read("#{file_path}", headers: true, header_converters: :symbol)
-    @@all = csv.map do |row|
-      GameTeams.new(row)
-    end
+    @@all = load_objects(file_path, 'GameTeams')
   end
 
   def self.winningest_team
@@ -68,8 +66,8 @@ class GameTeams
   def self.win_loss_perc_per_team
     home_away_games_per_team.reduce({}) do |result, team|
       result[team[0]] = {
-        away_win_percentage: ((team[1]["away"].count {|game| game.result == "WIN"})/team[1]["away"].size.to_f).round(4),
-        home_win_percentage: ((team[1]["home"].count {|game| game.result == "WIN"})/team[1]["home"].size.to_f).round(4)
+        away_win_percentage: ((team[1]['away'].count {|game| game.result == 'WIN'})/team[1]['away'].size.to_f).round(4),
+        home_win_percentage: ((team[1]['home'].count {|game| game.result == 'WIN'})/team[1]['home'].size.to_f).round(4)
         }
       result
     end
@@ -86,7 +84,7 @@ class GameTeams
     away_games = {}
     games_per_team.each do |team_id, game_array|
       away_games[team_id] = game_array.find_all do |game|
-        game.hoa == "away"
+        game.hoa == 'away'
       end
     end
     away_games
@@ -118,7 +116,7 @@ class GameTeams
     home_games = {}
     games_per_team.each do |team_id, game_array|
       home_games[team_id] = game_array.find_all do |game|
-        game.hoa == "home"
+        game.hoa == 'home'
       end
     end
     home_games
@@ -146,5 +144,16 @@ class GameTeams
     Team.team_id_to_team_name(order[0])
   end
 
- 
+  def self.team_id_to_coach(team_id, season_id)
+    @@all.find do |game| 
+      game.team_id == team_id && game.game_id[0..3] == season_id.to_s[0..3]
+    end.head_coach
+  end
+
+  def self.game_id_to_coach(game_id)
+    @@all.find do |game| 
+      game.game_id == game_id.to_s
+    end.head_coach
+  end
+
 end
