@@ -75,7 +75,7 @@ class GameCollection
 
   def teams_for_season(season_id)
     games_per_season[season_id.to_s].map do |game|
-      GameTeams.all.find_all {|game_team| game_team.game_id == game.game_id} 
+      GameTeams.all.find_all {|game_team| game_team.game_id == game.game_id}
     end.flatten
   end
 
@@ -93,7 +93,7 @@ class GameCollection
     end
   end
 
- def perc_per_coach(season_id)
+  def perc_per_coach(season_id)
     results_per_coach(season_id).reduce({}) do |result, coach_count|
       result[coach_count[0]] = [0.0, 0.0] if result[coach_count[0]].nil?
       result[coach_count[0]][0] = (coach_count[1][0] / (coach_count[1][0] + coach_count[1][1] + coach_count[1][2]).to_f).round(4)
@@ -114,7 +114,7 @@ class GameCollection
 
   def shots_and_goals_per_team(season_id)
     teams = teams_for_season(season_id).group_by {|team| team.team_id}
-    teams.reduce({}) do |result, team| 
+    teams.reduce({}) do |result, team|
       count_shots = team[1].sum {|game_team| game_team.shots.to_i}
       count_goals = team[1].sum {|game_team| game_team.goals.to_i}
       result[team[0]] = [count_shots, count_goals]
@@ -139,20 +139,22 @@ class GameCollection
     Team.team_id_to_team_name(least_accurate_team[0])
   end
 
-
-
-  def worst_offense
+  def team_hash
     team_hash = @games.reduce({}) do |team_id, game|
       team_id[game.home_team_id] = {goals_scored: 0, games_played: 0}
       team_id[game.away_team_id] = {goals_scored: 0, games_played: 0}
       team_id
     end
-    @games.each do |game|
+    teams = @games.each do |game|
       team_hash[game.home_team_id][:games_played] += 1
       team_hash[game.away_team_id][:games_played] += 1
       team_hash[game.away_team_id][:goals_scored] += game.away_goals
       team_hash[game.home_team_id][:goals_scored] += game.home_goals
     end
+    teams
+  end
+
+  def worst_offense
     team_worst_offense = team_hash.min_by do |team, info|
       info[:goals_scored].to_f / info[:games_played]
     end[0]
@@ -160,61 +162,47 @@ class GameCollection
     Team.team_id_to_team_name(team_worst_offense_id)
   end
 
-def best_offense
- team_hash = @games.reduce({}) do |team_id, game|
-  team_id[game.home_team_id] = {goals_scored: 0, games_played: 0}
-  team_id[game.away_team_id] = {goals_scored: 0, games_played: 0}
-  team_id
- end
- @games.each do |game|
-   team_hash[game.home_team_id][:games_played] += 1
-   team_hash[game.away_team_id][:games_played] += 1
-   team_hash[game.away_team_id][:goals_scored] += game.away_goals
-   team_hash[game.home_team_id][:goals_scored] += game.home_goals
- end
- team_worst_offense = team_hash.max_by do |team, info|
-   info[:goals_scored].to_f / info[:games_played]
- end[0]
- team_worst_offense_id = team_worst_offense.to_s
-  Team.team_id_to_team_name(team_worst_offense_id)
-end
-
-def worst_defense
-  team_hash = @games.reduce({}) do |team_id, game|
-    team_id[game.home_team_id] = {goals_let: 0, games_played: 0}
-    team_id[game.away_team_id] = {goals_let: 0, games_played: 0}
-    team_id
-end
-  @games.each do |game|
-    team_hash[game.home_team_id][:games_played] += 1
-    team_hash[game.away_team_id][:games_played] += 1
-    team_hash[game.away_team_id][:goals_let] += game.home_goals
-    team_hash[game.home_team_id][:goals_let] += game.away_goals
+  def best_offense
+   team_worst_offense = team_hash.max_by do |team, info|
+     info[:goals_scored].to_f / info[:games_played]
+   end[0]
+   team_worst_offense_id = team_worst_offense.to_s
+    Team.team_id_to_team_name(team_worst_offense_id)
   end
-  team_worst_defense = team_hash.max_by do |team, info|
-    info[:goals_let].to_f / info[:games_played]
-  end[0]
-  team_worst_defense_id = team_worst_defense.to_s
+
+  def worst_defense
+    team_worst_defense = team_hash.max_by do |team, info|
+      info[:goals_let].to_f / info[:games_played]
+    end[0]
+    team_worst_defense_id = team_worst_defense.to_s
+      Team.team_id_to_team_name(team_worst_defense_id)
+    end
+
+  def best_defense
+   team_worst_defense = team_hash.min_by do |team, info|
+     info[:goals_let].to_f / info[:games_played]
+   end[0]
+   team_worst_defense_id = team_worst_defense.to_s
     Team.team_id_to_team_name(team_worst_defense_id)
   end
 
-def best_defense
- team_hash = @games.reduce({}) do |team_id, game|
-  team_id[game.home_team_id] = {goals_let: 0, games_played: 0}
-  team_id[game.away_team_id] = {goals_let: 0, games_played: 0}
-  team_id
- end
- @games.each do |game|
-   team_hash[game.home_team_id][:games_played] += 1
-   team_hash[game.away_team_id][:games_played] += 1
-   team_hash[game.away_team_id][:goals_let] += game.home_goals
-   team_hash[game.home_team_id][:goals_let] += game.away_goals
- end
- team_worst_defense = team_hash.min_by do |team, info|
-   info[:goals_let].to_f / info[:games_played]
- end[0]
- team_worst_defense_id = team_worst_defense.to_s
-  Team.team_id_to_team_name(team_worst_defense_id)
-end
+  def total_tackles_per_team(season_id)
+    game_per_team_per_season = teams_for_season(season_id).group_by {|game_team| game_team.team_id}
+    tackles_per_team = game_per_team_per_season.reduce({}) do |result, team_games|
+      result[team_games[0]] = team_games[1].sum do |game|
+      game.tackles.to_i
+    end
+    result
+    end
+  end
 
+  def most_tackles(season_id)
+    most_tackles_team_id = (total_tackles_per_team(season_id).max_by {|team| team[1]})[0]
+    Team.team_id_to_team_name(most_tackles_team_id)
+  end
+
+  def fewest_tackles(season_id)
+    fewest_tackles_team_id = (total_tackles_per_team(season_id).min_by {|team| team[1]})[0]
+    Team.team_id_to_team_name(fewest_tackles_team_id)
+  end
 end
