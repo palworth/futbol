@@ -2,10 +2,10 @@ require_relative './game_collection'
 require_relative './game'
 require_relative './game_teams'
 require_relative './team'
-
-
+require_relative './season'
 
 class StatTracker
+
   attr_reader :game_path, :team_path, :game_teams_path
 
   def self.from_csv(locations)
@@ -23,6 +23,7 @@ class StatTracker
     @game_teams = GameTeams.from_csv(game_teams_path)
     Team.from_csv(team_path)
     @teams = Team.all
+    @season = Season.new(game_path)
   end
 
   def game_collection
@@ -66,19 +67,19 @@ class StatTracker
   end
 
   def winningest_coach(season_id)
-    @game_collection.winningest_coach(season_id)
+    @season.winningest_coach(season_id)
   end
 
   def worst_coach(season_id)
-    @game_collection.worst_coach(season_id)
+    @season.worst_coach(season_id)
   end
 
   def most_accurate_team(season_id)
-    @game_collection.most_accurate_team(season_id)
+    @season.most_accurate_team(season_id)
   end
 
   def least_accurate_team(season_id)
-    @game_collection.least_accurate_team(season_id)
+    @season.least_accurate_team(season_id)
   end
 
   def winningest_team
