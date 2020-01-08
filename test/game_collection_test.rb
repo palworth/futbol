@@ -74,7 +74,7 @@ class GameCollectionTest < Minitest::Test
     expected = {"29" => 1.667, "14" => 4.0, "13" => 2.5, "3" => 3.5, "15" => 3.667}
     assert_equal true, expected == @game_collection.ratio_shots_to_goals_per_team(20142015)
   end
-  
+
   def test_it_finds_best_offense
     assert_equal "New York City FC", @game_collection.best_offense
   end
@@ -84,11 +84,13 @@ class GameCollectionTest < Minitest::Test
   end
 
   def test_worst_defense
-    assert_equal "New York Red Bulls", @game_collection.worst_defense
+    # assert_equal "New York Red Bulls", @game_collection.worst_defense
+    assert_equal "FC Dallas", @game_collection.worst_defense
   end
 
   def test_best_defense
-    assert_equal "Orlando Pride", @game_collection.best_defense
+    # assert_equal "Orlando Pride", @game_collection.best_defense
+    assert_equal "FC Dallas", @game_collection.best_defense
   end
 
   def test_it_can_find_the_most_accurate_team
@@ -99,5 +101,17 @@ class GameCollectionTest < Minitest::Test
     assert_equal "DC United", @game_collection.least_accurate_team(20142015)
   end
 
-end
+  def test_most_tackles_by_team_by_season
+    assert_equal "FC Dallas", @game_collection.most_tackles("20122013")
+  end
 
+  def test_fewest_tackles_by_team_by_season
+    skip
+    assert_equal "Houston Dynamo", @game_collection.fewest_tackles("20122013")
+  end
+
+
+
+
+
+end
