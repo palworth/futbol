@@ -81,6 +81,10 @@ class StatTracker
     @game_collection.least_accurate_team(season_id)
   end
 
+  def biggest_bust(season_id)
+    @game_collection.biggest_bust(season_id)
+  end
+
   def winningest_team
     GameTeams.winningest_team
   end
