@@ -5,7 +5,6 @@ require_relative './team'
 require_relative './season'
 
 class StatTracker
-
   attr_reader :game_path, :team_path, :game_teams_path
 
   def self.from_csv(locations)
@@ -130,8 +129,15 @@ class StatTracker
     @game_collection.best_defense
   end
 
+  def most_tackles(season_id)
+    @season.most_tackles(season_id)
+  end
+
+  def fewest_tackles(season_id)
+    @season.fewest_tackles(season_id)
+  end
+
   def team_info(team_id)
     Team.team_info(team_id)
   end
-
 end
