@@ -132,7 +132,7 @@ end
   end[0]
   team_worst_defense_id = team_worst_defense.to_s
     Team.team_id_to_team_name(team_worst_defense_id)
-  end
+end
 
 def best_defense
  team_hash = @games.reduce({}) do |team_id, game|
