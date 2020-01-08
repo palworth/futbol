@@ -2,7 +2,7 @@ require 'minitest/autorun'
 require 'minitest/pride'
 require_relative '../lib/season'
 
-class SeasonTest < Minitest::Test 
+class SeasonTest < Minitest::Test
 
   def setup
     @season = Season.new
@@ -44,4 +44,17 @@ class SeasonTest < Minitest::Test
     assert_equal 'DC United', @season.least_accurate_team(20142015)
   end
 
+  def test_most_tackles_by_team_by_season
+    assert_equal "FC Dallas", @season.most_tackles("20122013")
+  end
+
+  def test_fewest_tackles_by_team_by_season
+    assert_equal "New York Red Bulls", @season.fewest_tackles("20122013")
+  end
+
+  def test_determine_total_tackles_per_team_by_season
+    expected = {"3"=>154, "6"=>170, "8"=>68, "9"=>77, "30"=>165, "16"=>146}
+
+    assert_equal expected, @season.total_tackles_per_team("20122013")
+  end
 end
