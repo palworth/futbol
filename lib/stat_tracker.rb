@@ -85,6 +85,10 @@ class StatTracker
     @game_collection.biggest_bust(season_id)
   end
 
+  def biggest_surprise(season_id)
+    @game_collection.biggest_surprise(season_id)
+  end
+
   def winningest_team
     GameTeams.winningest_team
   end

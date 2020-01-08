@@ -86,29 +86,25 @@ class GameCollection
   def results_per_coach(season_id)
     games_per_coach_for_season(season_id).reduce({}) do |result, coach_data|
       win_count = coach_data[1].count {|game| game.result == 'WIN'}
-      loss_count = coach_data[1].count {|game| game.result == 'LOSS'}
-      tie_count = coach_data[1].count {|game| game.result == 'TIE'}
-      result[coach_data[0]] = [win_count, loss_count, tie_count]
+      result[coach_data[0]] = [win_count, coach_data[1].size]
       result
     end
   end
 
  def perc_per_coach(season_id)
     results_per_coach(season_id).reduce({}) do |result, coach_count|
-      result[coach_count[0]] = [0.0, 0.0] if result[coach_count[0]].nil?
-      result[coach_count[0]][0] = (coach_count[1][0] / (coach_count[1][0] + coach_count[1][1] + coach_count[1][2]).to_f).round(4)
-      result[coach_count[0]][1] = (coach_count[1][1] / (coach_count[1][0] + coach_count[1][1] + coach_count[1][2]).to_f).round(4)
+      result[coach_count[0]] = (coach_count[1][0] /  coach_count[1][1].to_f).round(4)
       result
     end
   end
 
   def winningest_coach(season_id)
-    best_coach = perc_per_coach(season_id).max_by {|coach_perc| coach_perc[1][0]}
+    best_coach = perc_per_coach(season_id).max_by {|coach_perc| coach_perc[1]}
     best_coach[0]
   end
 
   def worst_coach(season_id)
-    worst_coach = perc_per_coach(season_id).min_by {|coach_perc| coach_perc[1][0]}
+    worst_coach = perc_per_coach(season_id).min_by {|coach_perc| coach_perc[1]}
     worst_coach[0]
   end
 
@@ -138,9 +134,7 @@ class GameCollection
     least_accurate_team = ratio_shots_to_goals_per_team(season_id).max_by {|team| team[1]}
     Team.team_id_to_team_name(least_accurate_team[0])
   end
-
-
-
+  
   def worst_offense
     team_hash = @games.reduce({}) do |team_id, game|
       team_id[game.home_team_id] = {goals_scored: 0, games_played: 0}
@@ -217,7 +211,7 @@ def best_defense
   Team.team_id_to_team_name(team_worst_defense_id)
 end
 
-def games_per_season_type(season_type)
+def games_per_season_type(games, season_type)
   games.find_all {|game| game.type == season_type}
 end
 
@@ -240,7 +234,6 @@ end
 def win_log_per_team(games_per_team)
   games_per_team.reduce({}) do |result, games|
     res = games[1].map do |game|
-      # require "pry"; binding.pry
       ((game.away_team_id.to_s == games[0]) && (game.away_goals > game.home_goals)) ||
       ((game.home_team_id.to_s == games[0]) && (game.home_goals > game.away_goals))
     end
@@ -256,25 +249,43 @@ def win_percentage_per_team(win_logs)
   end
 end
 
-def biggest_bust(season_id)
- games = games_per_season[season_id]
- post_season_games = games_per_season_type("Postseason")
- post_season_games_per_team_id = games_per_team_id(post_season_games)
- reg_season_games = games_per_season_type("Regular Season")
- reg_season_games_per_team_id = games_per_team_id(reg_season_games)
- post_season_win_logs = win_log_per_team(post_season_games_per_team_id)
- reg_season_win_logs = win_log_per_team(reg_season_games_per_team_id)
- post_season_win_percent = win_percentage_per_team(post_season_win_logs)
- reg_season_win_percent = win_percentage_per_team(reg_season_win_logs)
- percent_difference = reg_season_win_percent.reduce({}) do |result, percent|
-   # require "pry"; binding.pry
-   if !post_season_win_percent[percent[0]].nil?
-   result[percent[0]] = percent[1] - post_season_win_percent[percent[0]]
-   end
-   result
- end
- biggest_bust_team_id = percent_difference.max_by {|team| team[1]}
- Team.team_id_to_team_name(biggest_bust_team_id)
-end
+  def regular_postseason_with_percentage(season_id)
+    games = games_per_season[season_id]
+    post_season_games = games_per_season_type(games, "Postseason")
+    post_season_games_per_team_id = games_per_team_id(post_season_games)
+    reg_season_games = games_per_season_type(games, "Regular Season")
+    reg_season_games_per_team_id = games_per_team_id(reg_season_games)
+    post_season_win_logs = win_log_per_team(post_season_games_per_team_id)
+    reg_season_win_logs = win_log_per_team(reg_season_games_per_team_id)
+    post_season_win_percent = win_percentage_per_team(post_season_win_logs)
+    reg_season_win_percent = win_percentage_per_team(reg_season_win_logs)
+    [post_season_win_percent, reg_season_win_percent]
+  end
+
+  def percent_difference(season_id)
+    percentages = regular_postseason_with_percentage(season_id)
+    post_season_win_percent = percentages[0]
+    reg_season_win_percent = percentages[1]
+    reg_season_win_percent.reduce({}) do |result, percent|
+      if !post_season_win_percent[percent[0]].nil?
+        result[percent[0]] = percent[1] - post_season_win_percent[percent[0]]
+      else
+        result[percent[0]] = percent[1]
+      end
+      result
+    end
+  end
+
+  def biggest_bust(season_id)
+    perc_difference = percent_difference(season_id)
+    biggest_bust_team_id = perc_difference.max_by {|team| team[1]}
+    Team.team_id_to_team_name(biggest_bust_team_id[0])
+  end
+
+  def biggest_surprise(season_id)
+    perc_difference = percent_difference(season_id) 
+    biggest_surprise_team_id = perc_difference.min_by {|team| team[1]}
+    Team.team_id_to_team_name(biggest_surprise_team_id[0])
+  end
 
 end
