@@ -5,7 +5,7 @@ class GameTeams
 
   extend Loadable
 
-  attr_reader :game_id, :team_id, :hoa, :result, :goals, :head_coach, :shots
+  attr_reader :game_id, :team_id, :hoa, :result, :goals, :head_coach, :shots, :tackles
 
   def initialize(game_team_info)
     @game_id = game_team_info[:game_id]
@@ -15,6 +15,7 @@ class GameTeams
     @goals = game_team_info[:goals]
     @shots = game_team_info[:shots]
     @head_coach = game_team_info[:head_coach]
+    @tackles = game_team_info[:tackles]
   end
 
   @@all = []
@@ -145,15 +146,14 @@ class GameTeams
   end
 
   def self.team_id_to_coach(team_id, season_id)
-    @@all.find do |game| 
+    @@all.find do |game|
       game.team_id == team_id && game.game_id[0..3] == season_id.to_s[0..3]
     end.head_coach
   end
 
   def self.game_id_to_coach(game_id)
-    @@all.find do |game| 
+    @@all.find do |game|
       game.game_id == game_id.to_s
     end.head_coach
   end
-
 end
