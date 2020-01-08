@@ -74,7 +74,7 @@ class GameCollectionTest < Minitest::Test
     expected = {"29" => 1.667, "14" => 4.0, "13" => 2.5, "3" => 3.5, "15" => 3.667}
     assert_equal true, expected == @game_collection.ratio_shots_to_goals_per_team(20142015)
   end
-  
+
   def test_it_finds_best_offense
     assert_equal "New York City FC", @game_collection.best_offense
   end
@@ -99,5 +99,91 @@ class GameCollectionTest < Minitest::Test
     assert_equal "DC United", @game_collection.least_accurate_team(20142015)
   end
 
-end
+  def test_it_returns_games_per_season_type
+    # require "pry"; binding.pry
+    expected_1 = @game_collection.games[21..22]
+    expected_2 = @game_collection.games[0..20] + @game_collection.games[23..25]
+    assert_equal expected_1, @game_collection.games_per_season_type("Regular Season")
+    assert_equal expected_2, @game_collection.games_per_season_type("Postseason")
+  end
 
+  def test_it_returns_game_per_team_id
+    team_3 = @game_collection.games.values_at(0,1,2,3,11,12,13,14,24,25)
+    team_5 = @game_collection.games.values_at(11,12,13,14)
+    team_6 = @game_collection.games.values_at(0,1,2,3,23)
+    team_8 = @game_collection.games.values_at(4, 5, 24)
+    team_9 = @game_collection.games.values_at(4,5)
+    team_13 = @game_collection.games.values_at(22)
+    team_14 = @game_collection.games.values_at(21,22)
+    team_15 = @game_collection.games.values_at(25)
+    team_16 = @game_collection.games.values_at(6,7,8,9,10,20,23)
+    team_19 = @game_collection.games.values_at(20)
+    team_26 = @game_collection.games.values_at(15,16,17,18,19)
+    team_28 = @game_collection.games.values_at(15,16,17,18,19)
+    team_29 = @game_collection.games.values_at(-5)
+    team_30 = @game_collection.games.values_at(6,7,8,9,10)
+    expected = {
+      "3" => team_3,
+      "5" => team_5,
+      "6" => team_6,
+      "8" => team_8,
+      "9" => team_9,
+      "13" => team_13,
+      "14" => team_14,
+      "15" => team_15,
+      "16" => team_16,
+      "19" => team_19,
+      "26" => team_26,
+      "28" => team_28,
+      "29" => team_29,
+      "30" => team_30
+    }
+    assert_equal  expected, @game_collection.games_per_team_id(@game_collection.games)
+  end
+
+  def test_it_returns_win_percentage_per_team
+    team_3 = @game_collection.games.values_at(0,1,2,3,11,12,13,14,24,25)
+    team_5 = @game_collection.games.values_at(11,12,13,14)
+    team_6 = @game_collection.games.values_at(0,1,2,3,23)
+    team_8 = @game_collection.games.values_at(4, 5, 24)
+    team_9 = @game_collection.games.values_at(4,5)
+    team_13 = @game_collection.games.values_at(22)
+    team_14 = @game_collection.games.values_at(21,22)
+    team_15 = @game_collection.games.values_at(25)
+    team_16 = @game_collection.games.values_at(6,7,8,9,10,20,23)
+    team_19 = @game_collection.games.values_at(20)
+    team_26 = @game_collection.games.values_at(15,16,17,18,19)
+    team_28 = @game_collection.games.values_at(15,16,17,18,19)
+    team_29 = @game_collection.games.values_at(-5)
+    team_30 = @game_collection.games.values_at(6,7,8,9,10)
+    games_log_per_team = {
+      "3" => team_3,
+      "5" => team_5,
+      "6" => team_6,
+      "8" => team_8,
+      "9" => team_9,
+      "13" => team_13,
+      "14" => team_14,
+      "15" => team_15,
+      "16" => team_16,
+      "19" => team_19,
+      "26" => team_26,
+      "28" => team_28,
+      "29" => team_29,
+      "30" => team_30
+    }
+
+    expected = {
+      "3" => 0.1, "5" => 0.75, "6" => 1.0, "8" => 0.0, "9" => 1.0, "13" => 0.0,
+      "14" => 0.5, "15" => 1.0, "16" => 0.714, "19" => 0.0, "26" => 0.4, "28" => 0.6, "29" => 1.0, "30" => 0.2
+    }
+    win_logs = @game_collection.win_log_per_team(games_log_per_team)
+    assert_equal expected, @game_collection.win_percentage_per_team(win_logs)
+
+  end
+
+  def test_biggest_bust
+    assert_equal "DC United", @game_collection.biggest_bust
+  end
+
+end
