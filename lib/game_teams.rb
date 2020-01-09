@@ -5,7 +5,7 @@ class GameTeams
 
   extend Loadable
 
-  attr_reader :game_id, :team_id, :hoa, :result, :goals, :head_coach, :shots, :tackles 
+  attr_reader :game_id, :team_id, :hoa, :result, :goals, :head_coach, :shots, :tackles
 
   def initialize(game_team_info)
     @game_id = game_team_info[:game_id]
@@ -84,18 +84,14 @@ class GameTeams
   def self.away_games
     away_games = {}
     games_per_team.each do |team_id, game_array|
-      away_games[team_id] = game_array.find_all do |game|
-        game.hoa == 'away'
-      end
+      away_games[team_id] = game_array.find_all {|game|game.hoa == 'away'}
     end
     away_games
   end
 
   def self.lowest_scoring_visitor
     order = away_games.min_by do |team_id, game_array|
-      total = game_array.sum do |game|
-        game.goals.to_f
-      end
+      total = game_array.sum  {|game| game.goals.to_f}
       (total / game_array.length).round(2)
     end
     order[0]
@@ -104,9 +100,7 @@ class GameTeams
 
   def self.highest_scoring_visitor
     order = away_games.max_by do |team_id, game_array|
-      total = game_array.sum do |game|
-        game.goals.to_f
-      end
+      total = game_array.sum {|game| game.goals.to_f}
       (total / game_array.length).round(2)
     end
     order[0]
@@ -116,18 +110,14 @@ class GameTeams
   def self.home_games
     home_games = {}
     games_per_team.each do |team_id, game_array|
-      home_games[team_id] = game_array.find_all do |game|
-        game.hoa == 'home'
-      end
+      home_games[team_id] = game_array.find_all {|game| game.hoa == 'home'}
     end
     home_games
   end
 
   def self.highest_scoring_home_team
     order = home_games.max_by do |team_id, game_array|
-      total = game_array.sum do |game|
-        game.goals.to_f
-      end
+      total = game_array.sum {|game| game.goals.to_f}
       (total / game_array.length).round(2)
     end
     order[0]
@@ -136,9 +126,7 @@ class GameTeams
 
   def self.lowest_scoring_home_team
     order = home_games.min_by do |team_id, game_array|
-      total = game_array.sum do |game|
-        game.goals.to_f
-      end
+      total = game_array.sum {|game| game.goals.to_f}
       (total / game_array.length).round(2)
     end
     order[0]
@@ -156,5 +144,4 @@ class GameTeams
       game.game_id == game_id.to_s
     end.head_coach
   end
-
 end
