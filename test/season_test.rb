@@ -98,6 +98,53 @@ class SeasonTest < Minitest::Test
     }
     assert_equal expected, @season.games_per_team_id(@season.game_collection.games)
   end
+  def test_win_log_per_team
+    team_3 = @season.game_collection.games.values_at(0,1,2,3,11,12,13,14,24,25)
+    team_5 = @season.game_collection.games.values_at(11,12,13,14)
+    team_6 = @season.game_collection.games.values_at(0,1,2,3,23)
+    team_8 = @season.game_collection.games.values_at(4, 5, 24)
+    team_9 = @season.game_collection.games.values_at(4,5)
+    team_13 = @season.game_collection.games.values_at(22)
+    team_14 = @season.game_collection.games.values_at(21,22)
+    team_15 = @season.game_collection.games.values_at(25)
+    team_16 = @season.game_collection.games.values_at(6,7,8,9,10,20,23)
+    team_19 = @season.game_collection.games.values_at(20)
+    team_26 = @season.game_collection.games.values_at(15,16,17,18,19)
+    team_28 = @season.game_collection.games.values_at(15,16,17,18,19)
+    team_29 = @season.game_collection.games.values_at(-5)
+    team_30 = @season.game_collection.games.values_at(6,7,8,9,10)
+    games_log_per_team = {
+      "3" => team_3,
+      "5" => team_5,
+      "6" => team_6,
+      "8" => team_8,
+      "9" => team_9,
+      "13" => team_13,
+      "14" => team_14,
+      "15" => team_15,
+      "16" => team_16,
+      "19" => team_19,
+      "26" => team_26,
+      "28" => team_28,
+      "29" => team_29,
+      "30" => team_30
+    }
+    expected = { '3' => [false, false, false, false, false, false, false, false, true, false],
+      '5' => [false, true, true, true],
+      '6' => [true, true, true, true, true],
+      '8' => [false, false, false],
+      '9' => [true, true],
+      '13' => [false],
+      '14' => [false, true],
+      '15' => [true],
+      '16' => [true, true, false, true, true, true, false],
+      '19' => [false],
+      '26' => [true, false, true, false, false],
+      '28' => [false, true, false, true, true],
+      '29' => [true],
+      '30' => [false, false, true, false, false]}
+    assert_equal expected, @season.win_log_per_team(games_log_per_team)
+  end
 
   def test_it_returns_win_percentage_per_team
     team_3 = @season.game_collection.games.values_at(0,1,2,3,11,12,13,14,24,25)
