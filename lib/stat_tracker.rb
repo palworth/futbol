@@ -32,11 +32,11 @@ class StatTracker
   def percentage_home_wins
     @game_collection.percentage_home_wins
   end
-
+  
   def percentage_visitor_wins
     @game_collection.percentage_visitor_wins
   end
-
+  
   def percentage_ties
     @game_collection.percentage_ties
   end
@@ -52,43 +52,43 @@ class StatTracker
   def highest_total_score
     @game_collection.highest_total_score
   end
-
+  
   def lowest_total_score
     @game_collection.lowest_total_score
   end
-
+  
   def biggest_blowout
     @game_collection.biggest_blowout
   end
-
+  
   def count_of_games_by_season
     @game_collection.count_of_games_by_season
   end
-
+  
   def winningest_coach(season_id)
     @season.winningest_coach(season_id)
   end
-
+  
   def worst_coach(season_id)
     @season.worst_coach(season_id)
   end
-
+  
   def most_accurate_team(season_id)
     @season.most_accurate_team(season_id)
   end
-
+  
   def least_accurate_team(season_id)
     @season.least_accurate_team(season_id)
   end
-
+  
   def biggest_bust(season_id)
     @season.biggest_bust(season_id)
   end
-
+  
   def biggest_surprise(season_id)
     @season.biggest_surprise(season_id)
   end
-
+  
   def winningest_team
     GameTeams.winningest_team
   end
