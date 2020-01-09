@@ -81,6 +81,14 @@ class StatTracker
     @season.least_accurate_team(season_id)
   end
 
+  def biggest_bust(season_id)
+    @season.biggest_bust(season_id)
+  end
+
+  def biggest_surprise(season_id)
+    @season.biggest_surprise(season_id)
+  end
+
   def winningest_team
     GameTeams.winningest_team
   end

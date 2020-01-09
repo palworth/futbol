@@ -6,6 +6,7 @@ require_relative '../lib/game_collection'
 require_relative '../lib/team'
 
 class GameCollectionTest < Minitest::Test
+  
   def setup
     csv_file_path = './test/fixtures/games.csv'
     @game_collection = GameCollection.new(csv_file_path)
@@ -59,37 +60,37 @@ class GameCollectionTest < Minitest::Test
 
   def test_it_finds_team_collection_defense
     expected = {6=>{:goals_let=>7, :games_played=>5},
-     3=>{:goals_let=>28, :games_played=>10},
-     9=>{:goals_let=>3, :games_played=>2},
-     8=>{:goals_let=>9, :games_played=>3},
-     16=>{:goals_let=>11, :games_played=>7},
-     30=>{:goals_let=>13, :games_played=>5},
-     5=>{:goals_let=>6, :games_played=>4},
-     26=>{:goals_let=>12, :games_played=>5},
-     28=>{:goals_let=>11, :games_played=>5},
-     19=>{:goals_let=>3, :games_played=>1},
-     14=>{:goals_let=>5, :games_played=>2},
-     29=>{:goals_let=>1, :games_played=>1},
-     13=>{:goals_let=>3, :games_played=>1},
-     15=>{:goals_let=>2, :games_played=>1}}
+     3 => {:goals_let => 28, :games_played => 10},
+     9 => {:goals_let => 3, :games_played => 2},
+     8 => {:goals_let => 9, :games_played => 3},
+     16 => {:goals_let => 11, :games_played => 7},
+     30 => {:goals_let => 13, :games_played => 5},
+     5 => {:goals_let => 6, :games_played => 4},
+     26 => {:goals_let => 12, :games_played => 5},
+     28 => {:goals_let => 11, :games_played => 5},
+     19 => {:goals_let => 3, :games_played => 1},
+     14 => {:goals_let => 5, :games_played => 2},
+     29 => {:goals_let => 1, :games_played => 1},
+     13 => {:goals_let => 3, :games_played => 1},
+     15 => {:goals_let => 2, :games_played => 1}}
     assert_equal expected, @game_collection.team_collection_defense
   end
 
   def test_it_finds_team_collection_offense
     expected = {6=>{:goals_scored=>14, :games_played=>5},
-     3=>{:goals_scored=>17, :games_played=>10},
-     9=>{:goals_scored=>7, :games_played=>2},
-     8=>{:goals_scored=>4, :games_played=>3},
-     16=>{:goals_scored=>16, :games_played=>7},
-     30=>{:goals_scored=>7, :games_played=>5},
-     5=>{:goals_scored=>12, :games_played=>4},
-     26=>{:goals_scored=>11, :games_played=>5},
-     28=>{:goals_scored=>12, :games_played=>5},
-     19=>{:goals_scored=>2, :games_played=>1},
-     14=>{:goals_scored=>4, :games_played=>2},
-     29=>{:goals_scored=>3, :games_played=>1},
-     13=>{:goals_scored=>2, :games_played=>1},
-     15=>{:goals_scored=>3, :games_played=>1}}
+     3 => {:goals_scored => 17, :games_played => 10},
+     9 => {:goals_scored => 7, :games_played => 2},
+     8 => {:goals_scored => 4, :games_played => 3},
+     16 => {:goals_scored => 16, :games_played => 7},
+     30 => {:goals_scored => 7, :games_played => 5},
+     5 => {:goals_scored => 12, :games_played => 4},
+     26 => {:goals_scored => 11, :games_played => 5},
+     28 => {:goals_scored => 12, :games_played => 5},
+     19 => {:goals_scored => 2, :games_played => 1},
+     14 => {:goals_scored => 4, :games_played => 2},
+     29 => {:goals_scored => 3, :games_played => 1},
+     13 => {:goals_scored => 2, :games_played => 1},
+     15 => {:goals_scored => 3, :games_played => 1}}
     assert_equal expected, @game_collection.team_collection_offense
   end
 
@@ -108,6 +109,5 @@ class GameCollectionTest < Minitest::Test
   def test_best_defense
     assert_equal 'Orlando Pride', @game_collection.best_defense
   end
-
 
 end
