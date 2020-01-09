@@ -6,7 +6,7 @@ require_relative '../lib/game_collection'
 require_relative '../lib/team'
 
 class GameCollectionTest < Minitest::Test
-  
+
   def setup
     csv_file_path = './test/fixtures/games.csv'
     @game_collection = GameCollection.new(csv_file_path)
@@ -56,6 +56,17 @@ class GameCollectionTest < Minitest::Test
 
   def test_average_goals_per_game_method
     assert_equal 4.38, @game_collection.average_goals_per_game
+  end
+
+  def test_average_goals_by_season
+    assert_instance_of Hash, @game_collection.average_goals_by_season
+    expected = {"20122013"=>4.25,
+                "20152016"=>4.56,
+                "20132014"=>5.0,
+                "20142015"=>4.67,
+                "20162017"=>3.0}
+
+    assert_equal expected, @game_collection.average_goals_by_season
   end
 
   def test_it_finds_team_collection_defense
@@ -109,5 +120,4 @@ class GameCollectionTest < Minitest::Test
   def test_best_defense
     assert_equal 'Orlando Pride', @game_collection.best_defense
   end
-
 end
