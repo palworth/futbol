@@ -15,10 +15,6 @@ class SeasonTest < Minitest::Test
     assert_instance_of Season, @season
   end
 
-  def test_it_has_attributes
-    # assert_equal '20122013', @season.game_collection
-  end
-
   def test_it_can_find_the_winningest_coach_for_a_given_season
     assert_equal 'Claude Julien', @season.winningest_coach(20122013)
   end
